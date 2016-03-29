@@ -40,4 +40,13 @@ describe RegularEngine do
 
     expect(re).to eq /(?:a){4}/
   end
+
+  it 'makes at-least-n regexps' do
+    re = RegularEngine.make do
+      at_least(4) { literal 'a' }
+    end
+
+    expect(re).to eq /(?:a){4,}/
+    expect('aaaaaaaaa' =~ re).to eq 0
+  end
 end
