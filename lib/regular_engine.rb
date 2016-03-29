@@ -16,6 +16,6 @@ class RegularEngine
   end
 
   def literal(text)
-    @source << text
+    @source << Regexp.escape(text)
   end
 end

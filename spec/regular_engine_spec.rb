@@ -14,4 +14,12 @@ describe RegularEngine do
 
     expect(re).to eq /abc/
   end
+
+  it 'escapes metacharacters in literals' do
+    re = RegularEngine.make do
+      literal '.'
+    end
+
+    expect(re).to eq /\./
+  end
 end
