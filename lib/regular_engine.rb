@@ -18,4 +18,8 @@ class RegularEngine
   def literal(text)
     @source << Regexp.escape(text)
   end
+
+  def any_char
+    @source << '.'
+  end
 end

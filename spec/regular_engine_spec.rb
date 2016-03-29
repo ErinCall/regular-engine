@@ -22,4 +22,12 @@ describe RegularEngine do
 
     expect(re).to eq /\./
   end
+
+  it 'makes any-char regexps' do
+    re = RegularEngine.make do
+      any_char
+    end
+
+    expect(re).to eq /./
+  end
 end
