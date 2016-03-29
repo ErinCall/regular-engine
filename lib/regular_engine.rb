@@ -42,4 +42,9 @@ class RegularEngine
     subexpression = self.class.evaluate &block
     @source << "(?:#{subexpression.to_s}){#{n},}"
   end
+
+  def at_most(n, &block)
+    subexpression = self.class.evaluate &block
+    @source << "(?:#{subexpression.to_s}){,#{n}}"
+  end
 end
