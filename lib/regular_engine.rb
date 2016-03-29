@@ -60,4 +60,16 @@ class RegularEngine
     subexpression = self.class.evaluate &block
     @source << "(?:#{subexpression.to_s}){#{n},#{m}}"
   end
+
+  def one_or_more(&block)
+    at_least(1, &block)
+  end
+
+  def zero_or_more(&block)
+    at_least(0, &block)
+  end
+
+  def maybe(&block)
+    between(0, 1, &block)
+  end
 end

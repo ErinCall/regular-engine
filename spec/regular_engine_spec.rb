@@ -84,4 +84,36 @@ describe RegularEngine do
       }).to raise_error(ArgumentError)
     end
   end
+
+  it 'has a helper for +' do
+    re = RegularEngine.make do
+      one_or_more { literal 'hey' }
+    end
+
+    expect(re).to eq /(?:hey){1,}/
+
+    expect('heyheyhey' =~ re).to eq(0)
+    expect('hey' =~ re).to eq(0)
+    expect('h' =~ re).to be_nil
+  end
+
+  it 'has a helper for *' do
+    re = RegularEngine.make do
+      zero_or_more { literal 'hey' }
+    end
+
+    expect(re).to eq /(?:hey){0,}/
+
+    expect('heyheyhey' =~ re).to eq(0)
+    expect('hey' =~ re).to eq(0)
+    expect('h' =~ re).to eq(0)
+  end
+
+  it 'has a helper for ?' do
+    re = RegularEngine.make do
+      maybe { literal 'hey' }
+    end
+
+    expect(re).to eq /(?:hey){0,1}/
+  end
 end
