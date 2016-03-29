@@ -1,12 +1,22 @@
 class RegularEngine
   def self.make(&block)
-    re = new
-    re.instance_eval &block
-    re.compile
+    evaluate(&block).compile
   end
 
   def compile
     Regexp.new @source
+  end
+
+  def to_s
+    @source
+  end
+
+  protected
+
+  def self.evaluate(&block)
+    re = new
+    re.instance_eval &block
+    re
   end
 
   private
@@ -21,5 +31,10 @@ class RegularEngine
 
   def any_char
     @source << '.'
+  end
+
+  def exactly(n, &block)
+    subexpression = self.class.evaluate &block
+    @source << "(?:#{subexpression.to_s}){#{n}}"
   end
 end

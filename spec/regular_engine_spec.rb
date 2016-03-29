@@ -30,4 +30,14 @@ describe RegularEngine do
 
     expect(re).to eq /./
   end
+
+  it 'makes exactly-n regexps' do
+    re = RegularEngine.make do
+      exactly(4) {
+        literal 'a'
+      }
+    end
+
+    expect(re).to eq /(?:a){4}/
+  end
 end
