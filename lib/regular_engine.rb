@@ -47,4 +47,17 @@ class RegularEngine
     subexpression = self.class.evaluate &block
     @source << "(?:#{subexpression.to_s}){,#{n}}"
   end
+
+  def between(n, m=nil, &block)
+    if m.nil? && n.instance_of?(Range)
+      m = n.end
+      n = n.begin
+    elsif m.nil?
+      # ehhhh, this is sorta brittle...
+      raise ArgumentError.new("wrong number of arguments (given 1, expected 2)")
+    end
+
+    subexpression = self.class.evaluate &block
+    @source << "(?:#{subexpression.to_s}){#{n},#{m}}"
+  end
 end

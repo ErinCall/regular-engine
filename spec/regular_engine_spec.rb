@@ -58,4 +58,30 @@ describe RegularEngine do
     expect(re).to eq /(?:a){,4}/
     expect('a' =~ re).to eq 0
   end
+
+  describe 'from n to m regexp' do
+    it 'accepts a start and end' do
+      re = RegularEngine.make do
+        between(4, 6) { literal 'a' }
+      end
+
+      expect(re).to eq /(?:a){4,6}/
+    end
+
+    it 'accepts a range' do
+      re = RegularEngine.make do
+        between(4..6) { literal 'a' }
+      end
+
+      expect(re).to eq /(?:a){4,6}/
+    end
+
+    it 'gives a useful error message when given one number' do
+      expect(Proc.new {
+        re = RegularEngine.make do
+          between(4) { literal 'a' }
+        end
+      }).to raise_error(ArgumentError)
+    end
+  end
 end
