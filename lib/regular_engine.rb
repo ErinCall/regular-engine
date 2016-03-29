@@ -72,4 +72,16 @@ class RegularEngine
   def maybe(&block)
     between(0, 1, &block)
   end
+
+  def word_character
+    @source << '\w'
+  end
+
+  def number
+    @source << '\d'
+  end
+
+  def whitespace
+    @source << '\s'
+  end
 end

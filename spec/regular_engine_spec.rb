@@ -116,4 +116,22 @@ describe RegularEngine do
 
     expect(re).to eq /(?:hey){0,1}/
   end
+
+  it 'has a helper for \w' do
+    re = RegularEngine.make { word_character }
+
+    expect(re).to eq /\w/
+  end
+
+  it 'has a helper for \d' do
+    re = RegularEngine.make { number }
+
+    expect(re).to eq /\d/
+  end
+
+  it 'has a helper for \s' do
+    re = RegularEngine.make { whitespace }
+
+    expect(re).to eq /\s/
+  end
 end
