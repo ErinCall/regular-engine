@@ -134,4 +134,35 @@ describe RegularEngine do
 
     expect(re).to eq /\s/
   end
+
+  describe 'any_of' do
+    it 'accepts a list of strings' do
+      re = RegularEngine.make { any_of %w{a b c} }
+
+      expect(re).to eq /[abc]/
+    end
+
+    it 'accepts a range of strings' do
+      re = RegularEngine.make { any_of 'a'..'c' }
+
+      expect(re).to eq /[abc]/
+    end
+
+    it 'treats dashes as literal dashes in the character class' do
+      re = RegularEngine.make { any_of ['a', '-', 'c'] }
+
+      expect(re).to eq /[a\-c]/
+    end
+
+    it 'accepts a block when given no arguments' do
+      re = RegularEngine.make do
+        any_of do
+          literal 'abc'
+          literal 'def'
+        end
+      end
+
+      expect(re).to eq /(?:abc|def)/
+    end
+  end
 end

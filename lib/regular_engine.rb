@@ -4,11 +4,15 @@ class RegularEngine
   end
 
   def compile
-    Regexp.new @source
+    Regexp.new to_s
   end
 
   def to_s
-    @source
+    join ''
+  end
+
+  def join(delimiter)
+    @source.join(delimiter)
   end
 
   protected
@@ -22,7 +26,7 @@ class RegularEngine
   private
 
   def initialize
-    @source = ''
+    @source = []
   end
 
   def literal(text)
@@ -83,5 +87,17 @@ class RegularEngine
 
   def whitespace
     @source << '\s'
+  end
+
+  def any_of(chars=nil, &block)
+    if chars.nil? && block_given?
+      subexpression = self.class.evaluate &block
+      @source << "(?:#{subexpression.join('|')})"
+    elsif chars.respond_to? :map
+      character_class = chars.map(&Regexp.method(:escape)).join ''
+      @source << "[#{character_class}]"
+    else
+      raise ArgumentError.new("wrong number of arguments (given 0, expected 1)")
+    end
   end
 end
