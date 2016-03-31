@@ -148,10 +148,13 @@ describe RegularEngine do
       expect(re).to eq /[abc]/
     end
 
-    it 'treats dashes as literal dashes in the character class' do
-      re = RegularEngine.make { any_of ['a', '-', 'c'] }
+    it 'treats range metacharacters as literals' do
+      re = RegularEngine.make { any_of %w{^ a - c} }
 
-      expect(re).to eq /[a\-c]/
+      expect(re).to eq /[\^a\-c]/
+      # just verify that the escaping is correct
+      expect('^' =~ re).to eq 0
+      expect('-' =~ re).to eq 0
     end
 
     it 'accepts a block when given no arguments' do
