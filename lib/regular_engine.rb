@@ -15,6 +15,10 @@ class RegularEngine
     @source.join(delimiter)
   end
 
+  def map(&block)
+    @source.map(&block)
+  end
+
   protected
 
   def self.evaluate(&block)
@@ -96,6 +100,19 @@ class RegularEngine
     elsif chars.respond_to? :map
       character_class = chars.map(&Regexp.method(:escape)).join ''
       @source << "[#{character_class}]"
+    else
+      raise ArgumentError.new("wrong number of arguments (given 0, expected 1)")
+    end
+  end
+
+  def none_of(chars=nil, &block)
+    if chars.nil? && block_given?
+      subexpression = self.class.evaluate &block
+      alternatives = subexpression.map {|alternative| "(?!#{alternative})"}.join('')
+      @source << "(?:#{alternatives})"
+    elsif chars.respond_to? :map
+      character_class = chars.map(&Regexp.method(:escape)).join ''
+      @source << "[^#{character_class}]"
     else
       raise ArgumentError.new("wrong number of arguments (given 0, expected 1)")
     end

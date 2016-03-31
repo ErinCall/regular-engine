@@ -168,4 +168,46 @@ describe RegularEngine do
       expect(re).to eq /(?:abc|def)/
     end
   end
+
+  describe 'none_of' do
+    it 'accepts and negates a list of strings' do
+      re = RegularEngine.make { none_of %w{a b c} }
+
+      expect(re).to eq /[^abc]/
+    end
+
+    it 'accepts a range of strings' do
+      re = RegularEngine.make { none_of 'a'..'c' }
+
+      expect(re).to eq /[^abc]/
+    end
+
+    it 'treats range metacharacters as literals' do
+      re = RegularEngine.make { none_of %w{^ a - c} }
+
+      expect(re).to eq /[^\^a\-c]/
+      # just verify that the escaping is correct
+      expect('^' =~ re).to eq nil
+      # if the dash isn't escaped properly, the regex will refuse to match a
+      # 'b', since it'll be part of the [a-c] range.
+      expect('b' =~ re).to eq 0
+    end
+
+    it 'accepts a block when given no arguments' do
+      re = RegularEngine.make do
+        none_of do
+          literal 'abc'
+          literal 'def'
+        end
+      end
+
+      expect(re).to eq /(?:(?!abc)(?!def))/
+      # without anchors, the behavior of none_of is a little counterintuitive.
+      # here it's equal to 1 because it's matching starting at the "b"--"bc"
+      # is something other than "abc", after all. Using a start-of-string
+      # anchor, or something like that, would make this less surprising, but
+      # start-of-string isn't implemented as of this writing :)
+      expect('abc' =~ re).to eq 1
+    end
+  end
 end
