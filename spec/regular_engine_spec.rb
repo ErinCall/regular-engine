@@ -7,20 +7,28 @@ describe RegularEngine do
     expect(re).to be_a(Regexp)
   end
 
-  it 'can make a regex that matches a literal string' do
-    re = RegularEngine.make do
-      literal 'abc'
+  describe 'literal' do
+    it "matches regular ol' letters" do
+      re = RegularEngine.make do
+        literal 'abc'
+      end
+
+      expect(re).to eq /abc/
     end
 
-    expect(re).to eq /abc/
-  end
+    it 'escapes metacharacters' do
+      re = RegularEngine.make do
+        literal '.'
+      end
 
-  it 'escapes metacharacters in literals' do
-    re = RegularEngine.make do
-      literal '.'
+      expect(re).to eq /\./
     end
 
-    expect(re).to eq /\./
+    it 'passes unicode characters through unmolested' do
+      emojis = "\u{1F469}\u{200D}\u{2764}\u{FE0F}\u{200D}\u{1f469}"
+      re = RegularEngine.make { literal emojis }
+      expect(re).to eq Regexp.new(emojis)
+    end
   end
 
   it 'makes any-char regexps' do
