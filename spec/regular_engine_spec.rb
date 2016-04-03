@@ -131,16 +131,79 @@ describe RegularEngine do
     expect(re).to eq /\w/
   end
 
+  it 'has a helper for \W' do
+    re = RegularEngine.make { non_word_character }
+
+    expect(re).to eq /\W/
+  end
+
   it 'has a helper for \d' do
     re = RegularEngine.make { number }
 
     expect(re).to eq /\d/
   end
 
+  it 'has a helper for \D' do
+    re = RegularEngine.make { non_number }
+
+    expect(re).to eq /\D/
+  end
+
   it 'has a helper for \s' do
     re = RegularEngine.make { whitespace }
 
     expect(re).to eq /\s/
+  end
+
+  it 'has a helper for \S' do
+    re = RegularEngine.make { non_whitespace }
+
+    expect(re).to eq /\S/
+  end
+
+  it 'has a helper for ^' do
+    re = RegularEngine.make {
+      line_start
+      literal 'a'
+    }
+
+    expect(re).to eq /^a/
+  end
+
+  it 'has a helper for $' do
+    re = RegularEngine.make {
+      literal 'a'
+      line_end
+    }
+
+    expect(re).to eq /a$/
+  end
+
+  it 'has a helper for \A' do
+    re = RegularEngine.make {
+      text_start
+      literal 'a'
+    }
+
+    expect(re).to eq /\Aa/
+  end
+
+  it 'has a helper for \z' do
+    re = RegularEngine.make {
+      literal 'a'
+      text_end
+    }
+
+    expect(re).to eq /a\z/
+  end
+
+  it 'has a helper for \Z' do
+    re = RegularEngine.make {
+      literal 'a'
+      file_end
+    }
+
+    expect(re).to eq /a\Z/
   end
 
   describe 'any_of' do

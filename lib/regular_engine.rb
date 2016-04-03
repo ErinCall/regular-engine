@@ -85,12 +85,44 @@ class RegularEngine
     @source << '\w'
   end
 
+  def non_word_character
+    @source << '\W'
+  end
+
   def number
     @source << '\d'
   end
 
+  def non_number
+    @source << '\D'
+  end
+
   def whitespace
     @source << '\s'
+  end
+
+  def non_whitespace
+    @source << '\S'
+  end
+
+  def line_start
+    @source << '^'
+  end
+
+  def line_end
+    @source << '$'
+  end
+
+  def text_start
+    @source << '\A'
+  end
+
+  def text_end
+    @source << '\z'
+  end
+
+  def file_end
+    @source << '\Z'
   end
 
   def any_of(chars=nil, &block)
